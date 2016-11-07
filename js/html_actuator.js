@@ -46,6 +46,30 @@ HTMLActuator.prototype.clearContainer = function (container) {
   }
 };
 
+tile_names = ["Coffee", "Sleep", "Idea", "Code", "Meet \n supervisor", "Experiment", "Paper", "Conference", "Viva", "PhD"]
+var convertValueToTiles = function(val){
+
+  if(val === 1) return "Garbage";
+
+  var idx = -1;
+  var n = 1;
+  while(n < val) {
+    n <<= 1;
+    idx++;
+  }
+
+  if(idx >= 0 && idx < tile_names.length){
+    if (idx == 1) {
+      var coin_flip = Math.random();
+      var aux = (coin_flip < 0.5) ? "Mars Bar" : "Sleep";
+      return aux;
+    } 
+    return tile_names[idx];
+  } else return val;
+  
+
+};
+
 HTMLActuator.prototype.addTile = function (tile) {
   var self = this;
 
@@ -62,7 +86,7 @@ HTMLActuator.prototype.addTile = function (tile) {
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
+  inner.textContent = convertValueToTiles(tile.value);
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -126,7 +150,7 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
-  var message = won ? "You win!" : "Game over!";
+  var message = won ? "You got a PHD!" : "You suck... 5 wasted years!";
 
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
